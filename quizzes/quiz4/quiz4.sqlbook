@@ -6,7 +6,8 @@
 <font size = "5">
 Write your Emory ID as a comment (use double dash)
 -- SQLBook: Code
-
+-- Active: 1699465632405@@127.0.0.1@5432@postgres
+-- Samuel Lim
 -- SQLBook: Markup
 <font size = "5" >
 This quiz is open book 
@@ -21,7 +22,8 @@ Write the following message as a comment: <br>
 "I will abide by Emory's code of conduct"
 
 -- SQLBook: Code
-
+-- Active: 1699465632405@@127.0.0.1@5432@postgres
+-- I will abide by Emory's code of conduct
 -- SQLBook: Markup
 
 <font size = "5">
@@ -52,7 +54,30 @@ the image and following the instructions in Lecture 16
 HINT: Include any column names with upper case in doube quotations, <br> e.g.
 "raceId". If you don't you'll get an error
 -- SQLBook: Code
+-- Active: 1699465632405@@127.0.0.1@5432@postgres
 -- Write your own code
+DROP DATABASE IF EXISTS formula1;
+
+DROP TABLE IF EXISTS lap_times;
+
+
+
+CREATE TABLE lap_times (
+    raceId int,
+    driverId int,
+    lap int,
+    position int,
+    time varchar(255),
+    millliseconds int
+);
+
+INSERT INTO lap_times  VALUES (847, 20, 1, 1, '01:38.1', 98109);
+
+INSERT INTO lap_times  VALUES (167, 64, 48, 10, '01:14.0', 73984);
+
+INSERT INTO lap_times  VALUES (341, 3, 65, 13, '01:29.6', 89626);
+
+
 -- SQLBook: Code
 -- Write your own code
 -- SQLBook: Markup
@@ -85,7 +110,11 @@ HINT: Remember to always refer to column names with at <br>
 least one capital letter with double quotations, e.g. "driverId" <br>
 HINT: See Lecture 16
 -- SQLBook: Code
+-- Active: 1699465632405@@127.0.0.1@5432@postgres
 -- Write your own code
+SELECT * FROM pit_stops
+WHERE (lap >= 1) and (lap <= 5)
+ORDER BY milliseconds ASC;
 -- SQLBook: Markup
 <font size = "5">
 
@@ -101,6 +130,11 @@ grouped by "driverId" using SELECT, FROM, and GROUP BY.
 HINT: See the end of lectures 16
 -- SQLBook: Code
 -- Write your own code
+SELECT "driverId",
+       MIN(milliseconds) AS min_milliseconds,
+       MAX(milliseconds) AS max_milliseconds,
+FROM pit_stops
+GROUP BY "driverId";
 -- SQLBook: Markup
 
 <font size = "5">
@@ -118,6 +152,11 @@ HINT: Remember to include "driverId" in double <br>
 quotations it includes a mix of lower case and upper case letters
 -- SQLBook: Code
 -- Write your own code
+SELECT "driverId",
+       COUNT("driverId") as "num_driverId"
+FROM pit_stops
+GROUP BY "driverId"
+ORDER BY "num_driverId" DESC;
 -- SQLBook: Markup
 
 <font size = "5">
@@ -132,6 +171,11 @@ number of rows by "driverId" ```GROUP BY``` <br>
  using ```HAVING ```
 -- SQLBook: Code
 -- Write your own code
+SELECT "driverId",
+        COUNT("driverId") as "num_driverId"
+FROM pit_stops
+GROUP BY "driverId"
+HAVING COUNT("driverId") >= 200;
 -- SQLBook: Code
 
 -- BASIC SYNTAX OF SQL:
