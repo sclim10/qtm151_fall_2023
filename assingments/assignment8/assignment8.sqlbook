@@ -16,7 +16,11 @@ Add a comment with your Emory ID below
 -- SQLBook: Code
 -- Active: 1699465632405@@127.0.0.1@5432@postgres
 -- Write your own code
-DROP DATABASE IF EXISTS formula1;
+
+DROP DATABASE if exists formula1;
+
+CREATE DATABASE formula1;
+
 -- SQLBook: Markup
 
 <font size = "5">
