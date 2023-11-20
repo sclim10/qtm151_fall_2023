@@ -7520,7 +7520,7 @@ Print your Emory ID below
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Write your answer here:</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s1">'Samuel Lim'</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">'2549668'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7533,7 +7533,7 @@ Print your Emory ID below
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Samuel Lim
+<pre>2549668
 </pre>
 </div>
 </div>
@@ -7561,10 +7561,8 @@ Print your Emory ID below
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Write your answer here:</span>
-
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">psycopg2</span>
-<span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
 <span class="kn">from</span>   <span class="nn">sqlalchemy.engine</span> <span class="kn">import</span> <span class="n">URL</span>
 <span class="kn">from</span>   <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">text</span>
 </pre></div>
@@ -7602,7 +7600,7 @@ from Python as in Lecture 18 using <br/>
     <span class="n">port</span> <span class="o">=</span> <span class="mi">5432</span><span class="p">,</span>
     <span class="n">password</span>  <span class="o">=</span> <span class="s1">'12345'</span><span class="p">)</span>
 
-<span class="n">con</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">url_server</span><span class="p">)</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">url_server</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7664,12 +7662,14 @@ column names that have capital letters
 <span class="n">drivers</span>   <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"data_raw/drivers.csv"</span><span class="p">)</span>
 
 <span class="n">lap_times</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">'lap_times_sql'</span><span class="p">,</span>
-               <span class="n">con</span> <span class="o">=</span> <span class="n">con</span><span class="p">,</span>
-               <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">)</span>
+               <span class="n">con</span> <span class="o">=</span> <span class="n">connection</span><span class="p">,</span>
+               <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">,</span>
+               <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">drivers</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s1">'drivers_sql'</span><span class="p">,</span>
-               <span class="n">con</span><span class="p">,</span>
-               <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">)</span>
+               <span class="n">con</span> <span class="o">=</span> <span class="n">connection</span><span class="p">,</span>
+               <span class="n">if_exists</span><span class="o">=</span><span class="s1">'replace'</span><span class="p">,</span>
+               <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7718,7 +7718,7 @@ ascending order</li>
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">drivers_subset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT * FROM drivers_sql </span><span class="se">\</span>
 <span class="s2">                             WHERE nationality = 'American' </span><span class="se">\</span>
-<span class="s2">                             ORDER BY surname ASC;"</span><span class="p">),</span> <span class="n">con</span><span class="p">)</span>
+<span class="s2">                             ORDER BY surname ASC;"</span><span class="p">),</span> <span class="n">connection</span><span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">drivers_subset</span><span class="p">)</span>
 </pre></div>
@@ -7751,7 +7751,6 @@ ascending order</li>
 <thead>
 <tr style="text-align: right;">
 <th></th>
-<th>index</th>
 <th>driverId</th>
 <th>driverRef</th>
 <th>number</th>
@@ -7767,7 +7766,6 @@ ascending order</li>
 <tr>
 <th>0</th>
 <td>796</td>
-<td>796</td>
 <td>ader</td>
 <td>\N</td>
 <td>\N</td>
@@ -7780,7 +7778,6 @@ ascending order</li>
 <tr>
 <th>1</th>
 <td>615</td>
-<td>615</td>
 <td>agabashian</td>
 <td>\N</td>
 <td>\N</td>
@@ -7792,20 +7789,6 @@ ascending order</li>
 </tr>
 <tr>
 <th>2</th>
-<td>591</td>
-<td>591</td>
-<td>george_amick</td>
-<td>\N</td>
-<td>\N</td>
-<td>George</td>
-<td>Amick</td>
-<td>1924-10-24</td>
-<td>American</td>
-<td>http://en.wikipedia.org/wiki/George_Amick</td>
-</tr>
-<tr>
-<th>3</th>
-<td>517</td>
 <td>517</td>
 <td>amick</td>
 <td>\N</td>
@@ -7817,8 +7800,19 @@ ascending order</li>
 <td>http://en.wikipedia.org/wiki/Red_Amick</td>
 </tr>
 <tr>
+<th>3</th>
+<td>591</td>
+<td>george_amick</td>
+<td>\N</td>
+<td>\N</td>
+<td>George</td>
+<td>Amick</td>
+<td>1924-10-24</td>
+<td>American</td>
+<td>http://en.wikipedia.org/wiki/George_Amick</td>
+</tr>
+<tr>
 <th>4</th>
-<td>120</td>
 <td>121</td>
 <td>andretti</td>
 <td>\N</td>
@@ -7840,11 +7834,9 @@ ascending order</li>
 <td>...</td>
 <td>...</td>
 <td>...</td>
-<td>...</td>
 </tr>
 <tr>
 <th>153</th>
-<td>448</td>
 <td>449</td>
 <td>ward</td>
 <td>\N</td>
@@ -7858,7 +7850,6 @@ ascending order</li>
 <tr>
 <th>154</th>
 <td>677</td>
-<td>677</td>
 <td>webb</td>
 <td>\N</td>
 <td>\N</td>
@@ -7870,7 +7861,6 @@ ascending order</li>
 </tr>
 <tr>
 <th>155</th>
-<td>530</td>
 <td>530</td>
 <td>weiler</td>
 <td>\N</td>
@@ -7884,7 +7874,6 @@ ascending order</li>
 <tr>
 <th>156</th>
 <td>563</td>
-<td>563</td>
 <td>weyant</td>
 <td>\N</td>
 <td>\N</td>
@@ -7897,7 +7886,6 @@ ascending order</li>
 <tr>
 <th>157</th>
 <td>539</td>
-<td>539</td>
 <td>dempsey_wilson</td>
 <td>\N</td>
 <td>\N</td>
@@ -7909,7 +7897,7 @@ ascending order</li>
 </tr>
 </tbody>
 </table>
-<p>158 rows × 10 columns</p>
+<p>158 rows × 9 columns</p>
 </div>
 </div>
 </div>
@@ -7946,7 +7934,7 @@ it has a mix of upper and lower case letters</p>
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Write your own code</span>
 <span class="n">distinct_driverId</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT COUNT(DISTINCT </span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2">) AS </span><span class="se">\"</span><span class="s2">distinct_driverId</span><span class="se">\"</span><span class="s2"> </span><span class="se">\</span>
-<span class="s2">                                     FROM drivers_sql;"</span><span class="p">),</span> <span class="n">con</span><span class="p">)</span>
+<span class="s2">                                     FROM drivers_sql;"</span><span class="p">),</span> <span class="n">connection</span><span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">distinct_driverId</span><span class="p">)</span>
 </pre></div>
@@ -8027,7 +8015,7 @@ it has a mix of upper and lower case letters</p>
 <span class="n">average_milliseconds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT AVG(milliseconds) AS mean_milliseconds </span><span class="se">\</span>
 <span class="s2">                                        FROM lap_times_sql </span><span class="se">\</span>
 <span class="s2">                                        GROUP BY </span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2"> </span><span class="se">\</span>
-<span class="s2">                                        ORDER BY mean_milliseconds; "</span><span class="p">),</span><span class="n">con</span><span class="p">)</span>
+<span class="s2">                                        ORDER BY mean_milliseconds; "</span><span class="p">),</span><span class="n">connection</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8066,7 +8054,7 @@ it has a mix of upper and lower case letters</p>
 <span class="n">lap_times_drivers</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT *</span><span class="se">\</span>
 <span class="s2">                                     FROM lap_times_sql</span><span class="se">\</span>
 <span class="s2">                                     LEFT JOIN drivers_sql</span><span class="se">\</span>
-<span class="s2">                                     ON lap_times_sql.</span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2"> = drivers_sql.</span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2"> ;"</span><span class="p">),</span><span class="n">con</span><span class="p">)</span>
+<span class="s2">                                     ON lap_times_sql.</span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2"> = drivers_sql.</span><span class="se">\"</span><span class="s2">driverId</span><span class="se">\"</span><span class="s2"> ;"</span><span class="p">),</span><span class="n">connection</span><span class="p">)</span>
 
 <span class="n">display</span><span class="p">(</span><span class="n">lap_times_drivers</span><span class="p">)</span>
 </pre></div>
@@ -8099,14 +8087,12 @@ it has a mix of upper and lower case letters</p>
 <thead>
 <tr style="text-align: right;">
 <th></th>
-<th>index</th>
 <th>raceId</th>
 <th>driverId</th>
 <th>lap</th>
 <th>position</th>
 <th>time</th>
 <th>milliseconds</th>
-<th>index</th>
 <th>driverId</th>
 <th>driverRef</th>
 <th>number</th>
@@ -8121,14 +8107,12 @@ it has a mix of upper and lower case letters</p>
 <tbody>
 <tr>
 <th>0</th>
-<td>0</td>
 <td>841</td>
 <td>20</td>
 <td>1</td>
 <td>1</td>
 <td>1:38.109</td>
 <td>98109</td>
-<td>19</td>
 <td>20</td>
 <td>vettel</td>
 <td>5</td>
@@ -8141,14 +8125,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>1</th>
-<td>1</td>
 <td>841</td>
 <td>20</td>
 <td>2</td>
 <td>1</td>
 <td>1:33.006</td>
 <td>93006</td>
-<td>19</td>
 <td>20</td>
 <td>vettel</td>
 <td>5</td>
@@ -8161,14 +8143,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>2</th>
-<td>2</td>
 <td>841</td>
 <td>20</td>
 <td>3</td>
 <td>1</td>
 <td>1:32.713</td>
 <td>92713</td>
-<td>19</td>
 <td>20</td>
 <td>vettel</td>
 <td>5</td>
@@ -8181,14 +8161,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>3</th>
-<td>3</td>
 <td>841</td>
 <td>20</td>
 <td>4</td>
 <td>1</td>
 <td>1:32.803</td>
 <td>92803</td>
-<td>19</td>
 <td>20</td>
 <td>vettel</td>
 <td>5</td>
@@ -8201,14 +8179,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>4</th>
-<td>4</td>
 <td>841</td>
 <td>20</td>
 <td>5</td>
 <td>1</td>
 <td>1:32.342</td>
 <td>92342</td>
-<td>19</td>
 <td>20</td>
 <td>vettel</td>
 <td>5</td>
@@ -8236,19 +8212,15 @@ it has a mix of upper and lower case letters</p>
 <td>...</td>
 <td>...</td>
 <td>...</td>
-<td>...</td>
-<td>...</td>
 </tr>
 <tr>
 <th>538116</th>
-<td>538116</td>
 <td>1096</td>
 <td>822</td>
 <td>53</td>
 <td>16</td>
 <td>1:32.998</td>
 <td>92998</td>
-<td>821</td>
 <td>822</td>
 <td>bottas</td>
 <td>77</td>
@@ -8261,14 +8233,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>538117</th>
-<td>538117</td>
 <td>1096</td>
 <td>822</td>
 <td>54</td>
 <td>16</td>
 <td>1:32.995</td>
 <td>92995</td>
-<td>821</td>
 <td>822</td>
 <td>bottas</td>
 <td>77</td>
@@ -8281,14 +8251,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>538118</th>
-<td>538118</td>
 <td>1096</td>
 <td>822</td>
 <td>55</td>
 <td>16</td>
 <td>1:31.236</td>
 <td>91236</td>
-<td>821</td>
 <td>822</td>
 <td>bottas</td>
 <td>77</td>
@@ -8301,14 +8269,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>538119</th>
-<td>538119</td>
 <td>1096</td>
 <td>822</td>
 <td>56</td>
 <td>15</td>
 <td>1:30.566</td>
 <td>90566</td>
-<td>821</td>
 <td>822</td>
 <td>bottas</td>
 <td>77</td>
@@ -8321,14 +8287,12 @@ it has a mix of upper and lower case letters</p>
 </tr>
 <tr>
 <th>538120</th>
-<td>538120</td>
 <td>1096</td>
 <td>822</td>
 <td>57</td>
 <td>15</td>
 <td>1:30.743</td>
 <td>90743</td>
-<td>821</td>
 <td>822</td>
 <td>bottas</td>
 <td>77</td>
@@ -8341,7 +8305,7 @@ it has a mix of upper and lower case letters</p>
 </tr>
 </tbody>
 </table>
-<p>538121 rows × 17 columns</p>
+<p>538121 rows × 15 columns</p>
 </div>
 </div>
 </div>
